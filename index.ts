@@ -27,9 +27,26 @@ function searchEvents(options: SearchEventsOptions) {
   if (options.eventType === "courses") {
     events = courses;
   }
-  events.filter((event: Course | StudyGroup) => {
+  return events.filter((event: Course | StudyGroup) => {
     if (typeof options.query === "number") {
       return event.id === options.query;
     }
+    if (typeof options.query === "string") {
+      return event.keywords.includes(options.query);
+    }
   });
 }
+
+let enrolledEvents: (Course | StudyGroup)[] = [];
+
+function enroll(events: (Course | StudyGroup)[]) {
+  events.forEach((event) => enrolledEvents.push(event));
+}
+
+const searchResults = searchEvents({ query: "art", eventType: "courses" });
+
+console.log(searchResults);
+
+enroll(searchResults);
+
+console.log(enrolledEvents);
